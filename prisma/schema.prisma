@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  emailVerified  DateTime?
+  passwordHash   String
+  name           String?
+  companyType    String?   // "Auto-entrepreneur", etc.
+  siren          String?
+  timezone       String    @default("Europe/Paris")
+  locale         String    @default("fr-FR")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  vehicles       Vehicle[]
+  trips          Trip[]
+  exportJobs     ExportJob[]
+
+  @@map("users")
+}
+
+model Vehicle {
+  id            String  @id @default(cuid())
+  userId        String
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label         String
+  fiscalHP      Int      // CV fiscaux (1..13+)
+  fuelType      String   // essence/diesel/hybride/électrique
+  plate         String?  @unique
+  year          Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  trips         Trip[]
+
+  @@map("vehicles")
+}
+
+model Trip {
+  id            String   @id @default(cuid())
+  userId        String
+  vehicleId     String
+  date          DateTime
+  startAddr     String
+  startLat      Float?
+  startLng      Float?
+  endAddr       String
+  endLat        Float?
+  endLng        Float?
+  waypoints     Json?     // array of {addr, lat, lng}
+  distanceKm    Float     // stored km used for calc
+  purpose       String
+  roundTrip     Boolean   @default(false)
+  notes         String?
+  year          Int       // denormalized for barème lookup
+  amountEUR     Float     // computed snapshot
+  amountMode    String    // "IK"
+  vehicleCV     Int       // snapshot of fiscalHP at computation time
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicle       Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@map("trips")
+}
+
+model Bareme {
+  id        String  @id @default(cuid())
+  country   String  // "FR"
+  year      Int
+  cvMin     Int
+  cvMax     Int     // inclusive bucket upper bound (e.g., 3..5)
+  segments  Json    // e.g., [{ upTo: 5000, formula: "a*D + b" }, { upTo: 20000, formula: "c*D + d" }, { upTo: null, formula: "e*D" }]
+  params    Json    // { a: 0.529, b: 0, ... } for the year
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([country, year, cvMin, cvMax])
+  @@map("baremes")
+}
+
+model ExportJob {
+  id        String   @id @default(cuid())
+  userId    String
+  rangeFrom DateTime
+  rangeTo   DateTime
+  format    String   // "PDF" | "CSV"
+  status    String   // "PENDING" | "DONE" | "FAILED"
+  url       String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("export_jobs")
+}
