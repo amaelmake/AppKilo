@@ -68,10 +68,10 @@ export default function DashboardPage() {
         const trips = data.trips || [];
         
         // Calculate stats
-        const totalKm = trips.reduce((sum: number, trip: any) => 
+        const totalKm = trips.reduce((sum: number, trip: { roundTrip: boolean; distanceKm: number }) => 
           sum + (trip.roundTrip ? trip.distanceKm * 2 : trip.distanceKm), 0
         );
-        const estimatedEUR = trips.reduce((sum: number, trip: any) => 
+        const estimatedEUR = trips.reduce((sum: number, trip: { amountEUR: number }) => 
           sum + trip.amountEUR, 0
         );
         const tripsCount = trips.length;
@@ -97,12 +97,12 @@ export default function DashboardPage() {
           const weekEnd = new Date(weekStart);
           weekEnd.setDate(weekStart.getDate() + 6);
 
-          const weekTrips = trips.filter((trip: any) => {
+          const weekTrips = trips.filter((trip: { date: string }) => {
             const tripDate = new Date(trip.date);
             return tripDate >= weekStart && tripDate <= weekEnd;
           });
 
-          const weekKm = weekTrips.reduce((sum: number, trip: any) => 
+          const weekKm = weekTrips.reduce((sum: number, trip: { roundTrip: boolean; distanceKm: number }) => 
             sum + (trip.roundTrip ? trip.distanceKm * 2 : trip.distanceKm), 0
           );
 

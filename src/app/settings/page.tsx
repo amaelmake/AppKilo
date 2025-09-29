@@ -3,12 +3,12 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { UserProfileSchema } from '@/lib/validations';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card&apos;;
+import { Button } from '@/components/ui/button&apos;;
+import { Input } from '@/components/ui/input&apos;;
+import { Label } from '@/components/ui/label&apos;;
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select&apos;;
+import { UserProfileSchema } from '@/lib/validations&apos;;
 import { User, Settings as SettingsIcon, Building, Globe } from 'lucide-react';
 
 interface UserProfile {
@@ -23,28 +23,28 @@ export default function SettingsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [formData, setFormData] = useState<UserProfile>({
-    name: '',
-    companyType: '',
-    siren: '',
-    timezone: 'Europe/Paris',
-    locale: 'fr-FR',
+    name: &apos;&apos;,
+    companyType: &apos;&apos;,
+    siren: &apos;&apos;,
+    timezone: &apos;Europe/Paris&apos;,
+    locale: &apos;fr-FR&apos;,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState(&apos;&apos;);
+  const [success, setSuccess] = useState(&apos;&apos;);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin');
+    if (status === &apos;unauthenticated&apos;) {
+      router.push(&apos;/auth/signin&apos;);
       return;
     }
 
-    if (status === 'authenticated') {
+    if (status === &apos;authenticated&apos;) {
       // Initialize form with session data
       setFormData(prev => ({
         ...prev,
-        name: session.user?.name || '',
+        name: session.user?.name || &apos;&apos;,
       }));
     }
   }, [status, router, session]);
@@ -52,23 +52,23 @@ export default function SettingsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    setError('');
-    setSuccess('');
+    setError(&apos;&apos;);
+    setSuccess(&apos;&apos;);
 
     try {
       // Validate input
       const validatedFields = UserProfileSchema.safeParse(formData);
       if (!validatedFields.success) {
-        setError('Veuillez vérifier vos informations');
+        setError(&apos;Veuillez vérifier vos informations&apos;);
         setIsSaving(false);
         return;
       }
 
       // TODO: Implement profile update API
-      // const response = await fetch('/api/user/profile', {
-      //   method: 'PATCH',
+      // const response = await fetch(&apos;/api/user/profile&apos;, {
+      //   method: &apos;PATCH&apos;,
       //   headers: {
-      //     'Content-Type': 'application/json',
+      //     &apos;Content-Type&apos;: &apos;application/json&apos;,
       //   },
       //   body: JSON.stringify(validatedFields.data),
       // });
@@ -76,9 +76,9 @@ export default function SettingsPage() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      setSuccess('Profil mis à jour avec succès');
+      setSuccess(&apos;Profil mis à jour avec succès&apos;);
     } catch (error) {
-      setError('Une erreur est survenue');
+      setError(&apos;Une erreur est survenue&apos;);
     } finally {
       setIsSaving(false);
     }
@@ -98,7 +98,7 @@ export default function SettingsPage() {
     }));
   };
 
-  if (status === 'loading' || isLoading) {
+  if (status === &apos;loading&apos; || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
@@ -166,20 +166,20 @@ export default function SettingsPage() {
                 <Input
                   id="email"
                   type="email"
-                  value={session.user?.email || ''}
+                  value={session.user?.email || &apos;&apos;}
                   disabled
                   className="bg-gray-50"
                 />
                 <p className="text-xs text-gray-500">
-                  L'email ne peut pas être modifié
+                  L&apos;email ne peut pas être modifié
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="companyType">Type d'entreprise</Label>
+                <Label htmlFor="companyType">Type d&apos;entreprise</Label>
                 <Select
                   value={formData.companyType}
-                  onValueChange={(value) => handleSelectChange('companyType', value)}
+                  onValueChange={(value) => handleSelectChange(&apos;companyType&apos;, value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner" />
@@ -212,7 +212,7 @@ export default function SettingsPage() {
               </div>
 
               <Button type="submit" disabled={isSaving} className="w-full">
-                {isSaving ? 'Sauvegarde...' : 'Sauvegarder'}
+                {isSaving ? &apos;Sauvegarde...&apos; : &apos;Sauvegarder&apos;}
               </Button>
             </form>
           </CardContent>
@@ -226,7 +226,7 @@ export default function SettingsPage() {
               Préférences
             </CardTitle>
             <CardDescription>
-              Vos préférences d'affichage et de localisation
+              Vos préférences d&apos;affichage et de localisation
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -235,7 +235,7 @@ export default function SettingsPage() {
                 <Label htmlFor="timezone">Fuseau horaire</Label>
                 <Select
                   value={formData.timezone}
-                  onValueChange={(value) => handleSelectChange('timezone', value)}
+                  onValueChange={(value) => handleSelectChange(&apos;timezone&apos;, value)}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -252,7 +252,7 @@ export default function SettingsPage() {
                 <Label htmlFor="locale">Langue</Label>
                 <Select
                   value={formData.locale}
-                  onValueChange={(value) => handleSelectChange('locale', value)}
+                  onValueChange={(value) => handleSelectChange(&apos;locale&apos;, value)}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -284,7 +284,7 @@ export default function SettingsPage() {
             <div className="flex justify-between items-center py-2 border-b">
               <span className="text-sm text-gray-600">Membre depuis</span>
               <span className="text-sm font-medium">
-                {new Date().toLocaleDateString('fr-FR')}
+                {new Date().toLocaleDateString(&apos;fr-FR&apos;)}
               </span>
             </div>
             <div className="flex justify-between items-center py-2 border-b">

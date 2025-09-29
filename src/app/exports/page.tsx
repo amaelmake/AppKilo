@@ -3,12 +3,12 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card&apos;;
+import { Button } from '@/components/ui/button&apos;;
+import { Input } from '@/components/ui/input&apos;;
+import { Label } from '@/components/ui/label&apos;;
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select&apos;;
+import { Badge } from '@/components/ui/badge&apos;;
 import { FileText, Download, Calendar, Car } from 'lucide-react';
 
 interface Vehicle {
@@ -34,22 +34,22 @@ export default function ExportsPage() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [exportJobs, setExportJobs] = useState<ExportJob[]>([]);
   const [formData, setFormData] = useState({
-    from: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0],
-    to: new Date().toISOString().split('T')[0],
-    format: 'PDF',
-    vehicleId: 'all',
+    from: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split(&apos;T&apos;)[0],
+    to: new Date().toISOString().split(&apos;T&apos;)[0],
+    format: &apos;PDF&apos;,
+    vehicleId: &apos;all&apos;,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(&apos;&apos;);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin');
+    if (status === &apos;unauthenticated&apos;) {
+      router.push(&apos;/auth/signin&apos;);
       return;
     }
 
-    if (status === 'authenticated') {
+    if (status === &apos;authenticated&apos;) {
       fetchVehicles();
       fetchExportJobs();
     }
@@ -57,13 +57,13 @@ export default function ExportsPage() {
 
   const fetchVehicles = async () => {
     try {
-      const response = await fetch('/api/vehicles');
+      const response = await fetch(&apos;/api/vehicles&apos;);
       if (response.ok) {
         const data = await response.json();
         setVehicles(data);
       }
     } catch (error) {
-      console.error('Error fetching vehicles:', error);
+      console.error(&apos;Error fetching vehicles:&apos;, error);
     } finally {
       setIsLoading(false);
     }
@@ -72,31 +72,31 @@ export default function ExportsPage() {
   const fetchExportJobs = async () => {
     try {
       // TODO: Implement export jobs API
-      // const response = await fetch('/api/exports');
+      // const response = await fetch(&apos;/api/exports&apos;);
       // if (response.ok) {
       //   const data = await response.json();
       //   setExportJobs(data);
       // }
     } catch (error) {
-      console.error('Error fetching export jobs:', error);
+      console.error(&apos;Error fetching export jobs:&apos;, error);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsExporting(true);
-    setError('');
+    setError(&apos;&apos;);
 
     try {
       const submitData = {
         ...formData,
-        vehicleId: formData.vehicleId === 'all' ? undefined : formData.vehicleId,
+        vehicleId: formData.vehicleId === &apos;all&apos; ? undefined : formData.vehicleId,
       };
       
-      const response = await fetch('/api/exports', {
-        method: 'POST',
+      const response = await fetch(&apos;/api/exports&apos;, {
+        method: &apos;POST&apos;,
         headers: {
-          'Content-Type': 'application/json',
+          &apos;Content-Type&apos;: &apos;application/json&apos;,
         },
         body: JSON.stringify(submitData),
       });
@@ -104,14 +104,14 @@ export default function ExportsPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || 'Une erreur est survenue');
+        setError(data.error || &apos;Une erreur est survenue&apos;);
       } else {
         // TODO: Handle successful export
-        alert('Export en cours de génération...');
+        alert(&apos;Export en cours de génération...&apos;);
         fetchExportJobs();
       }
     } catch (error) {
-      setError('Une erreur est survenue');
+      setError(&apos;Une erreur est survenue&apos;);
     } finally {
       setIsExporting(false);
     }
@@ -133,31 +133,31 @@ export default function ExportsPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'DONE':
-        return 'bg-green-100 text-green-800';
-      case 'PENDING':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'FAILED':
-        return 'bg-red-100 text-red-800';
+      case &apos;DONE&apos;:
+        return &apos;bg-green-100 text-green-800&apos;;
+      case &apos;PENDING&apos;:
+        return &apos;bg-yellow-100 text-yellow-800&apos;;
+      case &apos;FAILED&apos;:
+        return &apos;bg-red-100 text-red-800&apos;;
       default:
-        return 'bg-gray-100 text-gray-800';
+        return &apos;bg-gray-100 text-gray-800&apos;;
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'DONE':
-        return 'Terminé';
-      case 'PENDING':
-        return 'En cours';
-      case 'FAILED':
-        return 'Échec';
+      case &apos;DONE&apos;:
+        return &apos;Terminé&apos;;
+      case &apos;PENDING&apos;:
+        return &apos;En cours&apos;;
+      case &apos;FAILED&apos;:
+        return &apos;Échec&apos;;
       default:
         return status;
     }
   };
 
-  if (status === 'loading' || isLoading) {
+  if (status === &apos;loading&apos; || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
@@ -228,10 +228,10 @@ export default function ExportsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="format">Format d'export</Label>
+                <Label htmlFor="format">Format d&apos;export</Label>
                 <Select
                   value={formData.format}
-                  onValueChange={(value) => handleSelectChange('format', value)}
+                  onValueChange={(value) => handleSelectChange(&apos;format&apos;, value)}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -247,7 +247,7 @@ export default function ExportsPage() {
                 <Label htmlFor="vehicleId">Véhicule (optionnel)</Label>
                 <Select
                   value={formData.vehicleId}
-                  onValueChange={(value) => handleSelectChange('vehicleId', value)}
+                  onValueChange={(value) => handleSelectChange(&apos;vehicleId&apos;, value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Tous les véhicules" />
@@ -264,7 +264,7 @@ export default function ExportsPage() {
               </div>
 
               <Button type="submit" disabled={isExporting} className="w-full">
-                {isExporting ? 'Génération...' : 'Générer l\'export'}
+                {isExporting ? &apos;Génération...&apos; : &apos;Générer l\&apos;export&apos;}
               </Button>
             </form>
           </CardContent>
@@ -290,9 +290,9 @@ export default function ExportsPage() {
                 const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
                 setFormData(prev => ({
                   ...prev,
-                  from: startOfMonth.toISOString().split('T')[0],
-                  to: now.toISOString().split('T')[0],
-                  vehicleId: 'all',
+                  from: startOfMonth.toISOString().split(&apos;T&apos;)[0],
+                  to: now.toISOString().split(&apos;T&apos;)[0],
+                  vehicleId: &apos;all&apos;,
                 }));
               }}
             >
@@ -308,9 +308,9 @@ export default function ExportsPage() {
                 const startOfQuarter = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
                 setFormData(prev => ({
                   ...prev,
-                  from: startOfQuarter.toISOString().split('T')[0],
-                  to: now.toISOString().split('T')[0],
-                  vehicleId: 'all',
+                  from: startOfQuarter.toISOString().split(&apos;T&apos;)[0],
+                  to: now.toISOString().split(&apos;T&apos;)[0],
+                  vehicleId: &apos;all&apos;,
                 }));
               }}
             >
@@ -326,9 +326,9 @@ export default function ExportsPage() {
                 const startOfYear = new Date(now.getFullYear(), 0, 1);
                 setFormData(prev => ({
                   ...prev,
-                  from: startOfYear.toISOString().split('T')[0],
-                  to: now.toISOString().split('T')[0],
-                  vehicleId: 'all',
+                  from: startOfYear.toISOString().split(&apos;T&apos;)[0],
+                  to: now.toISOString().split(&apos;T&apos;)[0],
+                  vehicleId: &apos;all&apos;,
                 }));
               }}
             >
@@ -366,10 +366,10 @@ export default function ExportsPage() {
                     <FileText className="w-5 h-5 text-gray-400" />
                     <div>
                       <p className="font-medium">
-                        {new Date(job.rangeFrom).toLocaleDateString('fr-FR')} - {new Date(job.rangeTo).toLocaleDateString('fr-FR')}
+                        {new Date(job.rangeFrom).toLocaleDateString(&apos;fr-FR&apos;)} - {new Date(job.rangeTo).toLocaleDateString(&apos;fr-FR&apos;)}
                       </p>
                       <p className="text-sm text-gray-600">
-                        {job.format} • {new Date(job.createdAt).toLocaleDateString('fr-FR')}
+                        {job.format} • {new Date(job.createdAt).toLocaleDateString(&apos;fr-FR&apos;)}
                       </p>
                     </div>
                   </div>
@@ -377,7 +377,7 @@ export default function ExportsPage() {
                     <Badge className={getStatusColor(job.status)}>
                       {getStatusLabel(job.status)}
                     </Badge>
-                    {job.status === 'DONE' && job.url && (
+                    {job.status === &apos;DONE&apos; && job.url && (
                       <Button size="sm" variant="outline">
                         <Download className="w-4 h-4 mr-2" />
                         Télécharger
@@ -394,7 +394,7 @@ export default function ExportsPage() {
       {/* Info Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">💡 Formats d'export</CardTitle>
+          <CardTitle className="text-lg">💡 Formats d&apos;export</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
